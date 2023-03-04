@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 )
@@ -17,7 +17,7 @@ func SaveToFile[T any](data T, filePath string) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(ReplaceTilde(filePath), v, os.ModePerm)
+	err = os.WriteFile(ReplaceTilde(filePath), v, os.ModePerm)
 	return err
 }
 
@@ -30,7 +30,7 @@ func ReadFromFile[T any](data *T, filePath string) error {
 	}
 	defer file.Close()
 
-	bytes, err := ioutil.ReadAll(file)
+	bytes, err := io.ReadAll(file)
 	if err != nil {
 		return errors.New(fmt.Sprintf("error reading file '%s'\n\n%s", filePath, err))
 	}
